@@ -1,0 +1,20 @@
+if [[ ! -z $SSH_AUTH_SOCK ]]; then
+   echo "zshrc.d/ssh-agent: warning: SSH_AUTH_SOCK is set; skipping agent setup"
+else
+
+    export AGENT_FILE=/tmp/ssh-mrb
+
+    (umask 077; touch "$AGENT_FILE")
+
+    . "$AGENT_FILE" >/dev/null 2>&1
+    ssh-add -l >/dev/null 2>&1
+
+    if [ $? = 2 ]; then
+        echo "stale agent file; restarting ssh-agent.  don't forget to run ssh-add." >&2
+        ssh-agent > "$AGENT_FILE"
+        . "$AGENT_FILE" >/dev/null 2>&1
+    fi
+
+    unset AGENT_FILE
+
+fi

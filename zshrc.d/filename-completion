@@ -1,0 +1,10 @@
+# Autocomplete for all files regardless of context
+
+_complete_files () {
+  eval "$_comp_setup"
+  _main_complete _files
+}
+
+# ^[[Z: shift-tab (at least on OS X/iTerm2)
+
+compdef -k _complete_files complete-word '^[[Z'

@@ -1,0 +1,19 @@
+# -*- mode: shell-script; -*-
+
+setopt prompt_subst
+autoload -Uz vcs_info
+zstyle ':vcs_info:*' actionformats '%F{8}[%F{2}%s%F{6}::%F{10}%b%F{6}::%F{9}%a%F{8}]%f'
+zstyle ':vcs_info:*' formats '%F{8}[%F{2}%s%F{6}::%F{10}%b%F{8}]%f'
+zstyle ':vcs_info:(sv[nk]|bzr):*' branchformat '%b%F{4}:%F{11}%r'
+
+zstyle ':vcs_info:*' enable git hg svn cvs
+
+# or use pre_cmd, see man zshcontrib
+vcs_info_wrapper() {
+  vcs_info
+  if [ -n "$vcs_info_msg_0_" ]; then
+    echo "%{$fg[grey]%}${vcs_info_msg_0_}%{$reset_color%}$del"
+  fi
+}
+
+RPROMPT=$'$(vcs_info_wrapper)'

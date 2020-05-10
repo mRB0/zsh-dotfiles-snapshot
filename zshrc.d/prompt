@@ -1,0 +1,64 @@
+# -*- mode: shell-script; -*-
+
+# set variable identifying the chroot you work in (used in the prompt below)
+if [ -z "$debian_chroot" ] && [ -r /etc/debian_chroot ]; then
+    debian_chroot=$(cat /etc/debian_chroot)
+fi
+
+# set a fancy prompt (non-color, unless we know we "want" color)
+color_prompt=yes
+
+if [ -n "$color_prompt" ]; then
+    autoload -U colors && colors
+fi
+
+
+case "$(hostname | cut -f1 -d.)" in
+    chopper|dante)
+        prompt_color=$fg[green]
+        ;;
+    bergelmir)
+        prompt_color=$fg[green]
+        ;;
+    vortex)
+        prompt_color=$fg[magenta]
+        ;;
+    wingnut|pepper)
+        prompt_color=$fg[magenta]
+        ;;
+    snowball)
+        prompt_color=$fg[blue]
+        ;;
+    iris)
+        prompt_color=$fg[cyan]
+        ;;
+    *)
+        prompt_color=$fg[yellow]
+        ;;
+esac
+
+if [ -n "$color_prompt" ]; then
+    prompt_root="%{${prompt_color}%}%n%{$fg_bold[black]%}@%{$reset_color%}"
+else
+    prompt_root="%n@"
+fi
+
+setopt promptsubst
+
+if [ -n "$color_prompt" ]; then
+    PROMPT="%(?..%{$fg_bold[red]%}%?%{$color_reset%} )${debian_chroot:+($debian_chroot) }%(!.${prompt_root}.)%{${bold_color}${prompt_color}%}%m%{${reset_color}%}:%{${fg_bold[white]}%}%~%{${reset_color}%}> "
+else
+    PROMPT="%(?..%? )${debian_chroot:+($debian_chroot) }%(!.${prompt_root}.)"'%m:%~> '
+fi
+
+unset color_prompt prompt_root prompt_color debian_chroot
+
+# TODO: Verify this works.
+# If this is an xterm set the title to user@host:dir
+case "$TERM" in
+xterm*|rxvt*)
+    PROMPT=$'%{\e]0;'"${debian_chroot:+($debian_chroot) }%n@%m: %~"$'\a'"%}$PROMPT"
+    ;;
+*)
+    ;;
+esac

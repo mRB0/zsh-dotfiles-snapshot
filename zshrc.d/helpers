@@ -1,0 +1,7 @@
+# -*- mode: shell-script; -*-
+
+lesspipe="$(which src-hilite-lesspipe.sh)"
+if [[ -x "$lesspipe" ]]; then
+    export LESSOPEN="| $lesspipe %s"
+    export LESS="$LESS -iR "
+fi

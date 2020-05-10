@@ -1,0 +1,28 @@
+# -*- mode: shell-script; -*-
+
+bindkey "^[F" emacs-forward-word
+bindkey "^[f" emacs-forward-word
+
+bindkey "\e[1;5D" backward-word
+bindkey "\e[1;5C" emacs-forward-word
+
+# home and end
+bindkey "\e[H" beginning-of-line
+bindkey "\e[F" end-of-line
+
+# not set by default on OS X?  delete key
+bindkey "^[[3~" delete-char
+
+bindkey "^[W" kill-region
+
+# Search history when pressing up/down?
+#bindkey "\e[B" down-line-or-search
+#bindkey "\e[A" up-line-or-search  
+
+# I prefer to set wordchars; bash style does weird things with spaces -- eg. 
+# ls -l /^W => ls - (where'd the l go?)
+#autoload -U select-word-style
+#select-word-style bash
+
+# remove / from wordchars
+WORDCHARS='-*?_.[]~=&;!#$%^(){}<>'

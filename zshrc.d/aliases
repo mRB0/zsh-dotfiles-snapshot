@@ -1,0 +1,55 @@
+# -*- mode: shell-script; -*-
+
+if [ -x "$(which gls)" ]; then
+    LS=gls
+else
+    LS=ls
+fi
+
+alias hd="hexdump -C"
+alias ls="$LS -F"
+
+function find_dircolors
+{
+    if [ -x "$(which gdircolors)" ]; then
+        which gdircolors
+    elif [ -x "$(which dircolors)" ]; then
+        which dircolors
+    fi
+}
+
+# enable color support of ls and also add handy aliases
+dircolors=$(find_dircolors)
+if [ -n "$dircolors" ]; then
+    eval "$($dircolors -b)"
+    alias ls="$LS --color=auto -F"
+
+    alias grep='grep --color=auto'
+    alias fgrep='fgrep --color=auto'
+    alias egrep='egrep --color=auto'
+
+fi
+
+# some ls aliases
+
+alias ll='ls -l'
+alias la='ls -A'
+
+alias e=$EDITOR
+
+function ff
+{
+    find . -iname \*"$@"\*
+}
+
+alias dirs='dirs -v' # because default dirs output can become "obnoxious and unreadable"
+
+alias gst='git status'
+
+alias t0='tmux a -t 0'
+alias qag='ag -Q'
+
+#alias clj='java -cp /usr/share/java/jline.jar:/usr/share/java/clojure.jar clojure.main'
+#alias clj_repl='java -cp /usr/share/java/jline.jar:/usr/share/java/clojure.jar jline.ConsoleRunner clojure.main'
+
+alias frg='rg -F'
